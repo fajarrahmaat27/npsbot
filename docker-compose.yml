@@ -1,0 +1,35 @@
+services:
+  app:
+    build: .
+    container_name: nps-app
+    volumes:
+      - .:/var/www
+    networks:
+      - nps-network
+
+  webserver:
+    image: nginx:alpine
+    container_name: nps-webserver
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - nps-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: nps-db
+    environment:
+      POSTGRES_DB: nps_db
+      POSTGRES_USER: neutra_user
+      POSTGRES_PASSWORD: secret_password
+    ports:
+      - "5432:5432"
+    networks:
+      - nps-network
+
+networks:
+  nps-network:
+    driver: bridge
