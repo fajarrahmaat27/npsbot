@@ -6,24 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        // Gunakan CREATE karena ini adalah file migrasi awal
         Schema::create('nps_submissions', function (Blueprint $table) {
             $table->id();
-            $table->string('telegram_id'); // ID unik dari Telegram
-            $table->string('name')->nullable(); // Nama yang diketik user
-            $table->string('company')->nullable(); // Nama PT yang diketik user
-            $table->string('status')->default('waiting_name'); // Mengatur alur bot
+            $table->string('telegram_id')->unique();
+            $table->string('name')->nullable(); // Sesuai rencana trigger otomatis
+            $table->string('company')->nullable();
+            
+            // Kolom untuk tracking jadwal di NeutraDC
+            $table->timestamp('checkin_at')->nullable();
+            $table->timestamp('checkout_at')->nullable();
+            
+            // Status awal adalah 'waiting'
+            $table->string('status')->default('waiting'); 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('nps_submissions');

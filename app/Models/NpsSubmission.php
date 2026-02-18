@@ -12,8 +12,14 @@ class NpsSubmission extends Model
         'telegram_id',
         'name',
         'company',
-        'score',
-        'status'
+        'status',
+        'checkin_at', // Ditambahkan
+        'checkout_at' // Ditambahkan
+    ];
+
+    protected $casts = [
+        'checkin_at' => 'datetime',
+        'checkout_at' => 'datetime',
     ];
 
     public function responses(): HasMany

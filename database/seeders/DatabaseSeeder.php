@@ -15,11 +15,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Buat User Admin
+        \App\Models\User::factory()->create([
+            'name' => 'Admin NeutraDC',
+            'email' => 'admin@example.com',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // 2. Jalankan QuestionSeeder
+        $this->call(QuestionSeeder::class);
+
+        // 3. Jalankan Simulasi Tamu untuk Trigger NPS
+        \App\Models\NpsSubmission::create([
+            'telegram_id' => '5498002831', // GANTI DENGAN ID-MU UNTUK TES
+            'name' => 'Tamu Simulasi NeutraDC',
+            'company' => 'PT Telkom Indonesia',
+            'checkin_at' => now()->subHours(2),
+            'checkout_at' => '2026-02-13 11:10:00', // Dibuat lampau agar terpicu otomatis
+            'status' => 'waiting',
         ]);
     }
     
